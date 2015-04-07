@@ -1,0 +1,15 @@
+.game_board {
+  width: 50%;
+  margin: auto;
+}
+
+.row {
+  width: 100%;
+  height: 40px;
+}
+
+.col {
+  border: solid black 1px;
+  height: 40px;
+  width: 10%;
+}
