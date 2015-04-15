@@ -4,9 +4,6 @@ var Game = function() {
 };
 
 Game.prototype.render = function() {
-  console.log(this);
-  console.log(this.view);
-  console.log(this.model);
   this.view.render(this.model);
 };
 
