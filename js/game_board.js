@@ -11,7 +11,7 @@ Game.prototype.render = function() {
 };
 
 Game.prototype.bindEvents = function() {
-  //TODO: move pressKey
+  //TODO: move pressKey function
   var pressKey = function(event) {
     event.preventDefault();
     switch(event.which) {
@@ -47,22 +47,23 @@ Game.Model = function() {
 Game.View = function() {};
 
 Game.View.prototype.render = function(model) {
+  //TODO: refactor render function
   for(var i = 0; i < model.height; i++) {
-    var row = $('<div class="row"></div>');
+    var row = $('<tr></tr>');
     for(var j = 0; j < model.width; j++) {
-      var column = $('<div class="col"></div>');
+      var col = $('<td></td>');
       //color squares
       if (typeof model.board[i][j] != 'undefined') {
-        column.css("backgroundColor", model.board[i][j]);
+        col.css("backgroundColor", model.board[i][j]);
       }
-      row.append(column);
+      row.append(col);
     }
     $('.game_board').append(row);
   }
-  //render tetromino
+
   var tetromino = model.active_tetromino;
   for(var i = tetromino.coords.x; i < tetromino.size; i++) {
-    var row = $('.row:eq(' + i + ')');
+    var row = $('tr:eq(' + i + ')');
     for(var j = tetromino.coords.y; j < tetromino.size; j++) {
       var col = row.children()[j];
       if (tetromino.occupies(i, j)) {

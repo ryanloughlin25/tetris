@@ -1,14 +1,19 @@
+.game_board_table {
+  width: 50%;
+  margin: auto;
+}
+
 .game_board {
   width: 50%;
   margin: auto;
 }
 
-.row {
+tr {
   width: 100%;
   height: 40px;
 }
 
-.col {
+td {
   border: solid black 1px;
   height: 40px;
   width: 10%;
