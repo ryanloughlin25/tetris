@@ -4,25 +4,34 @@ var Game = function() {
 };
 
 Game.prototype.render = function() {
+  this.view.clear_board();
   this.view.render(this.model);
+  this.view.render_tetromino(this.model.active_tetromino);
 };
 
 Game.prototype.bindEvents = function() {
+    console.log("bind key press");
   //TODO: move pressKey function
+  var game = this;
   var pressKey = function(event) {
-    event.preventDefault();
     switch(event.which) {
-      case 37:
+      //TODO: disable moving up when done testing
+      case 87:
+        game.model.active_tetromino.coords.y -= 1;
         break;
-      case 38:
+      case 65:
+        game.model.active_tetromino.coords.x -= 1;
         break;
-      case 39:
+      case 83:
+        game.model.active_tetromino.coords.y += 1;
         break;
-      case 40:
+      case 68:
+        game.model.active_tetromino.coords.x += 1;
         break;
 
       default: return;
     }
+    game.render();
   };
   $(document).on('keydown', pressKey);
 };
@@ -43,6 +52,10 @@ Game.Model = function() {
 
 Game.View = function() {};
 
+Game.View.prototype.clear_board = function() {
+  $('.game_board').empty();
+};
+
 Game.View.prototype.render = function(model) {
   //TODO: refactor render function
   for(var i = 0; i < model.height; i++) {
@@ -57,12 +70,15 @@ Game.View.prototype.render = function(model) {
     }
     $('.game_board').append(row);
   }
+};
 
-  var tetromino = model.active_tetromino;
-  for(var i = tetromino.coords.x; i < tetromino.size; i++) {
-    var row = $('tr:eq(' + i + ')');
-    for(var j = tetromino.coords.y; j < tetromino.size; j++) {
-      var col = row.children()[j];
+Game.View.prototype.render_tetromino = function(tetromino) {
+  var x = tetromino.coords.x;
+  var y = tetromino.coords.y;
+  for(var i = 0; i < tetromino.size; i++) {
+    var row = $('tr:eq(' + (i + y) + ')');
+    for(var j = 0; j < tetromino.size; j++) {
+      var col = row.children()[j + x];
       if (tetromino.occupies(i, j)) {
         col.style.backgroundColor = tetromino.color;
       }
@@ -75,8 +91,8 @@ Tetromino = function() {
   this.color = 'red';
   this.size = 3;
   this.coords = {
-    x: 0,
-    y: 0,
+    x: 1,
+    y: 1,
   }
   this.bounding_square = new Array(this.size);
   for (var i = 0; i < this.size; i++) {
