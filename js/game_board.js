@@ -1,12 +1,11 @@
 var Game = function() {
   this.model = new Game.Model();
   this.view = new Game.View();
+  this.view.appendBoardHTML(this.model);
 };
 
 Game.prototype.render = function() {
-  this.view.clearBoard();
   this.view.render(this.model);
-  this.view.renderTetromino(this.model.activeTetromino);
 };
 
 Game.prototype.bindEvents = function() {
@@ -41,37 +40,41 @@ Game.Model.prototype.move = function(keyCode) {
 
 Game.View = function() {};
 
-Game.View.prototype.clearBoard = function() {
-  $('.game_board').empty();
-};
-
-Game.View.prototype.render = function(model) {
-  //TODO: refactor render function
+Game.View.prototype.appendBoardHTML = function(model) {
   for (var i = 0; i < model.height; i++) {
     var row = $('<tr></tr>');
     for (var j = 0; j < model.width; j++) {
-      var col = $('<td></td>');
-      //color squares
-      if (typeof model.board[i][j] != 'undefined') {
-        col.css("backgroundColor", model.board[i][j]);
-      }
-      row.append(col);
+      row.append($('<td></td>'));
     }
     $('.game_board').append(row);
   }
 };
 
+Game.View.prototype.colorSquare = function(x, y, color) {
+  var row = $('tr:eq(' + y + ')');
+  var col = row.children()[x];
+  if (typeof color == 'string') {
+    col.style.backgroundColor = color;
+  } else {
+    col.style.backgroundColor = '';
+  }
+};
+
+Game.View.prototype.render = function(model) {
+  for (var x = 0; x < model.width; x++) {
+    for (var y = 0; y < model.height; y++) {
+      this.colorSquare(x, y, model.board[x][y]);
+    }
+  }
+  this.renderTetromino(model.activeTetromino);
+};
+
 Game.View.prototype.renderTetromino = function(tetromino) {
-  var xMin = tetromino.coords.xMin;
-  var xMax = tetromino.coords.xMax;
-  var yMin = tetromino.coords.yMin;
-  var yMax = tetromino.coords.yMax;
-  for (var i = yMin; i <= yMax; i++) {
-    var row = $('tr:eq(' + i + ')');
-    for (var j = xMin; j <= xMax; j++) {
-      var col = row.children()[j];
-      if (tetromino.occupies(i - yMin, j - xMin)) {
-        col.style.backgroundColor = tetromino.color;
+  var coords = tetromino.coords;
+  for (var y = coords.yMin; y <= coords.yMax; y++) {
+    for (var x = coords.xMin; x <= coords.xMax; x++) {
+      if (tetromino.occupies(x, y)) {
+        this.colorSquare(x, y, tetromino.color);
       }
     }
   }
@@ -97,8 +100,8 @@ Tetromino = function() {
   }
 };
 
-Tetromino.prototype.occupies = function(i, j) {
-  return this.boundingSquare[i][j];
+Tetromino.prototype.occupies = function(x, y) {
+  return this.boundingSquare[y - this.coords.yMin][x - this.coords.xMin];
 };
 
 Tetromino.prototype.move = function(direction) {
