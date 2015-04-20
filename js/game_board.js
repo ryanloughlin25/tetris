@@ -13,23 +13,24 @@ Game.prototype.bindEvents = function() {
     console.log("bind key press");
   //TODO: move pressKey function
   var game = this;
+  var tetromino = game.model.active_tetromino;
   var pressKey = function(event) {
     switch(event.which) {
       //TODO: disable moving up when done testing
       case 87:
-        game.model.active_tetromino.coords.y -= 1;
+        tetromino.move('up');
         break;
       case 65:
-        game.model.active_tetromino.coords.x -= 1;
+        tetromino.move('left');
         break;
       case 83:
-        game.model.active_tetromino.coords.y += 1;
+        tetromino.move('down');
         break;
       case 68:
-        game.model.active_tetromino.coords.x += 1;
+        tetromino.move('right');
         break;
-
-      default: return;
+      default:
+        return;
     }
     game.render();
   };
@@ -102,9 +103,37 @@ Tetromino = function() {
   this.bounding_square[1][0] = true;
   this.bounding_square[1][1] = true;
   this.bounding_square[1][2] = true;
-  this.occupies = function(i, j) {
-    return this.bounding_square[i][j];
-  };
+};
+
+Tetromino.prototype.occupies = function(i, j) {
+  return this.bounding_square[i][j];
+};
+
+Tetromino.prototype.move = function(direction) {
+  //TODO: need to prevent the tetromino from leaving the board
+  //instead, currently prevents the bounding square from leaving the board
+  switch(direction) {
+    case 'left':
+      if(this.coords.x > 0) {
+        this.coords.x -= 1;
+      }
+      break;
+    case 'right':
+      if(this.coords.x < 10 - this.size) {
+        this.coords.x += 1;
+      }
+      break;
+    case 'up':
+      if(this.coords.y > 0) {
+        this.coords.y -= 1;
+      }
+      break;
+    case 'down':
+      if(this.coords.y < 20 - this.size) {
+        this.coords.y += 1;
+      }
+      break;
+  }
 };
 
 var setup = function() {
