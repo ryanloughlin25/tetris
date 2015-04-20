@@ -4,9 +4,9 @@ var Game = function() {
 };
 
 Game.prototype.render = function() {
-  this.view.clear_board();
+  this.view.clearBoard();
   this.view.render(this.model);
-  this.view.render_tetromino(this.model.active_tetromino);
+  this.view.renderTetromino(this.model.activeTetromino);
 };
 
 Game.prototype.bindEvents = function() {
@@ -25,7 +25,7 @@ Game.Model = function() {
   for (var i = 0; i < this.height; i++) {
     this.board[i] = new Array(this.width);
   };
-  this.active_tetromino = new Tetromino();
+  this.activeTetromino = new Tetromino();
   this.directions = {
     //TODO: disable moving up when done testing
     87: 'up',
@@ -35,13 +35,13 @@ Game.Model = function() {
   };
 };
 
-Game.Model.prototype.move = function(key_code) {
-  this.active_tetromino.move(this.directions[key_code]);
+Game.Model.prototype.move = function(keyCode) {
+  this.activeTetromino.move(this.directions[keyCode]);
 };
 
 Game.View = function() {};
 
-Game.View.prototype.clear_board = function() {
+Game.View.prototype.clearBoard = function() {
   $('.game_board').empty();
 };
 
@@ -61,16 +61,16 @@ Game.View.prototype.render = function(model) {
   }
 };
 
-Game.View.prototype.render_tetromino = function(tetromino) {
-  var x_min = tetromino.coords.x_min;
-  var x_max = tetromino.coords.x_max;
-  var y_min = tetromino.coords.y_min;
-  var y_max = tetromino.coords.y_max;
-  for (var i = y_min; i <= y_max; i++) {
+Game.View.prototype.renderTetromino = function(tetromino) {
+  var xMin = tetromino.coords.xMin;
+  var xMax = tetromino.coords.xMax;
+  var yMin = tetromino.coords.yMin;
+  var yMax = tetromino.coords.yMax;
+  for (var i = yMin; i <= yMax; i++) {
     var row = $('tr:eq(' + i + ')');
-    for (var j = x_min; j <= x_max; j++) {
+    for (var j = xMin; j <= xMax; j++) {
       var col = row.children()[j];
-      if (tetromino.occupies(i - y_min, j - x_min)) {
+      if (tetromino.occupies(i - yMin, j - xMin)) {
         col.style.backgroundColor = tetromino.color;
       }
     }
@@ -81,50 +81,50 @@ Tetromino = function() {
   this.type = 'T';
   this.color = 'red';
   this.size = 3;
-  this.bounding_square = new Array(this.size);
+  this.boundingSquare = new Array(this.size);
   for (var i = 0; i < this.size; i++) {
-    this.bounding_square[i] = new Array(this.size);
+    this.boundingSquare[i] = new Array(this.size);
   }
-  this.bounding_square[0][1] = true;
-  this.bounding_square[1][0] = true;
-  this.bounding_square[1][1] = true;
-  this.bounding_square[1][2] = true;
+  this.boundingSquare[0][1] = true;
+  this.boundingSquare[1][0] = true;
+  this.boundingSquare[1][1] = true;
+  this.boundingSquare[1][2] = true;
   this.coords = {
-    x_min: 0,
-    x_max: 2,
-    y_min: 0,
-    y_max: 1,
+    xMin: 0,
+    xMax: 2,
+    yMin: 0,
+    yMax: 1,
   }
 };
 
 Tetromino.prototype.occupies = function(i, j) {
-  return this.bounding_square[i][j];
+  return this.boundingSquare[i][j];
 };
 
 Tetromino.prototype.move = function(direction) {
   switch(direction) {
     case 'left':
-      if (this.coords.x_min > 0) {
-        this.coords.x_min -= 1;
-        this.coords.x_max -= 1;
+      if (this.coords.xMin > 0) {
+        this.coords.xMin -= 1;
+        this.coords.xMax -= 1;
       }
       break;
     case 'right':
-      if (this.coords.x_max < 9) {
-        this.coords.x_min += 1;
-        this.coords.x_max += 1;
+      if (this.coords.xMax < 9) {
+        this.coords.xMin += 1;
+        this.coords.xMax += 1;
       }
       break;
     case 'up':
-      if (this.coords.y_min > 0) {
-        this.coords.y_min -= 1;
-        this.coords.y_max -= 1;
+      if (this.coords.yMin > 0) {
+        this.coords.yMin -= 1;
+        this.coords.yMax -= 1;
       }
       break;
     case 'down':
-      if (this.coords.y_max < 19) {
-        this.coords.y_min += 1;
-        this.coords.y_max += 1;
+      if (this.coords.yMax < 19) {
+        this.coords.yMin += 1;
+        this.coords.yMax += 1;
       }
       break;
   }
