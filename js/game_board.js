@@ -74,13 +74,15 @@ Game.View.prototype.render = function(model) {
 };
 
 Game.View.prototype.render_tetromino = function(tetromino) {
-  var x = tetromino.coords.x;
-  var y = tetromino.coords.y;
-  for (var i = 0; i < tetromino.size; i++) {
-    var row = $('tr:eq(' + (i + y) + ')');
-    for (var j = 0; j < tetromino.size; j++) {
-      var col = row.children()[j + x];
-      if (tetromino.occupies(i, j)) {
+  var x_min = tetromino.coords.x_min;
+  var x_max = tetromino.coords.x_max;
+  var y_min = tetromino.coords.y_min;
+  var y_max = tetromino.coords.y_max;
+  for (var i = y_min; i <= y_max; i++) {
+    var row = $('tr:eq(' + i + ')');
+    for (var j = x_min; j <= x_max; j++) {
+      var col = row.children()[j];
+      if (tetromino.occupies(i - y_min, j - x_min)) {
         col.style.backgroundColor = tetromino.color;
       }
     }
@@ -91,10 +93,6 @@ Tetromino = function() {
   this.type = 'T';
   this.color = 'red';
   this.size = 3;
-  this.coords = {
-    x: 1,
-    y: 1,
-  }
   this.bounding_square = new Array(this.size);
   for (var i = 0; i < this.size; i++) {
     this.bounding_square[i] = new Array(this.size);
@@ -103,6 +101,12 @@ Tetromino = function() {
   this.bounding_square[1][0] = true;
   this.bounding_square[1][1] = true;
   this.bounding_square[1][2] = true;
+  this.coords = {
+    x_min: 0,
+    x_max: 2,
+    y_min: 0,
+    y_max: 1,
+  }
 };
 
 Tetromino.prototype.occupies = function(i, j) {
@@ -114,23 +118,27 @@ Tetromino.prototype.move = function(direction) {
   //instead, currently prevents the bounding square from leaving the board
   switch(direction) {
     case 'left':
-      if (this.coords.x > 0) {
-        this.coords.x -= 1;
+      if (this.coords.x_min > 0) {
+        this.coords.x_min -= 1;
+        this.coords.x_max -= 1;
       }
       break;
     case 'right':
-      if (this.coords.x < 10 - this.size) {
-        this.coords.x += 1;
+      if (this.coords.x_max < 9) {
+        this.coords.x_min += 1;
+        this.coords.x_max += 1;
       }
       break;
     case 'up':
-      if (this.coords.y > 0) {
-        this.coords.y -= 1;
+      if (this.coords.y_min > 0) {
+        this.coords.y_min -= 1;
+        this.coords.y_max -= 1;
       }
       break;
     case 'down':
-      if (this.coords.y < 20 - this.size) {
-        this.coords.y += 1;
+      if (this.coords.y_max < 19) {
+        this.coords.y_min += 1;
+        this.coords.y_max += 1;
       }
       break;
   }
