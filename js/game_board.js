@@ -59,9 +59,9 @@ Game.View.prototype.clear_board = function() {
 
 Game.View.prototype.render = function(model) {
   //TODO: refactor render function
-  for(var i = 0; i < model.height; i++) {
+  for (var i = 0; i < model.height; i++) {
     var row = $('<tr></tr>');
-    for(var j = 0; j < model.width; j++) {
+    for (var j = 0; j < model.width; j++) {
       var col = $('<td></td>');
       //color squares
       if (typeof model.board[i][j] != 'undefined') {
@@ -76,9 +76,9 @@ Game.View.prototype.render = function(model) {
 Game.View.prototype.render_tetromino = function(tetromino) {
   var x = tetromino.coords.x;
   var y = tetromino.coords.y;
-  for(var i = 0; i < tetromino.size; i++) {
+  for (var i = 0; i < tetromino.size; i++) {
     var row = $('tr:eq(' + (i + y) + ')');
-    for(var j = 0; j < tetromino.size; j++) {
+    for (var j = 0; j < tetromino.size; j++) {
       var col = row.children()[j + x];
       if (tetromino.occupies(i, j)) {
         col.style.backgroundColor = tetromino.color;
@@ -114,22 +114,22 @@ Tetromino.prototype.move = function(direction) {
   //instead, currently prevents the bounding square from leaving the board
   switch(direction) {
     case 'left':
-      if(this.coords.x > 0) {
+      if (this.coords.x > 0) {
         this.coords.x -= 1;
       }
       break;
     case 'right':
-      if(this.coords.x < 10 - this.size) {
+      if (this.coords.x < 10 - this.size) {
         this.coords.x += 1;
       }
       break;
     case 'up':
-      if(this.coords.y > 0) {
+      if (this.coords.y > 0) {
         this.coords.y -= 1;
       }
       break;
     case 'down':
-      if(this.coords.y < 20 - this.size) {
+      if (this.coords.y < 20 - this.size) {
         this.coords.y += 1;
       }
       break;
