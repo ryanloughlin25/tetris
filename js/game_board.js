@@ -10,35 +10,12 @@ Game.prototype.render = function() {
 };
 
 Game.prototype.bindEvents = function() {
-    console.log("bind key press");
-  //TODO: move pressKey function
   var game = this;
-  var tetromino = game.model.active_tetromino;
   var pressKey = function(event) {
-    switch(event.which) {
-      //TODO: disable moving up when done testing
-      case 87:
-        tetromino.move('up');
-        break;
-      case 65:
-        tetromino.move('left');
-        break;
-      case 83:
-        tetromino.move('down');
-        break;
-      case 68:
-        tetromino.move('right');
-        break;
-      default:
-        return;
-    }
+    game.model.move(event.which);
     game.render();
   };
   $(document).on('keydown', pressKey);
-};
-
-Game.prototype.move = function() {
-  return;
 };
 
 Game.Model = function() {
@@ -49,6 +26,17 @@ Game.Model = function() {
     this.board[i] = new Array(this.width);
   };
   this.active_tetromino = new Tetromino();
+  this.directions = {
+    //TODO: disable moving up when done testing
+    87: 'up',
+    65: 'left',
+    83: 'down',
+    68: 'right',
+  };
+};
+
+Game.Model.prototype.move = function(key_code) {
+  this.active_tetromino.move(this.directions[key_code]);
 };
 
 Game.View = function() {};
@@ -114,8 +102,6 @@ Tetromino.prototype.occupies = function(i, j) {
 };
 
 Tetromino.prototype.move = function(direction) {
-  //TODO: need to prevent the tetromino from leaving the board
-  //instead, currently prevents the bounding square from leaving the board
   switch(direction) {
     case 'left':
       if (this.coords.x_min > 0) {
