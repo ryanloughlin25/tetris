@@ -71,7 +71,6 @@ Game.View.prototype.render = function(model) {
 
 Game.View.prototype.renderTetromino = function(tetromino) {
   var coords = tetromino.coordsToColor();
-  console.log(coords);
   for (var i = 0; i < coords.length; i++) {
     this.colorSquare(coords[i].x, coords[i].y, tetromino.color);
   }

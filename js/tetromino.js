@@ -1,4 +1,4 @@
-var tetrominoDescriptions = [
+var tetrominoTypes = [
   {
     type: 'I',
     color: 'cyan',
@@ -8,12 +8,8 @@ var tetrominoDescriptions = [
       [false, false, false, false],
       [false, false, false, false],
     ],
-    coords: {
-      xMin: 3,
-      xMax: 6,
-      yMin: 0,
-      yMax: 0,
-    },
+    x: 3,
+    y: -1,
   },
   {
     type: 'O',
@@ -23,12 +19,8 @@ var tetrominoDescriptions = [
       [false, true, true, false],
       [false, false, false, false],
     ],
-    coords: {
-      xMin: 4,
-      xMax: 5,
-      yMin: 0,
-      yMax: 1,
-    },
+    x: 3,
+    y: 0,
   },
   {
     type: 'T',
@@ -38,12 +30,8 @@ var tetrominoDescriptions = [
       [true, true, true],
       [false, false, false],
     ],
-    coords: {
-      xMin: 3,
-      xMax: 5,
-      yMin: 0,
-      yMax: 1,
-    },
+    x: 3,
+    y: 0,
   },
   {
     type: 'S',
@@ -53,12 +41,8 @@ var tetrominoDescriptions = [
       [true, true, false],
       [false, false, false],
     ],
-    coords: {
-      xMin: 3,
-      xMax: 5,
-      yMin: 0,
-      yMax: 1,
-    },
+    x: 3,
+    y: 0,
   },
   {
     type: 'Z',
@@ -68,12 +52,8 @@ var tetrominoDescriptions = [
       [false, true, true],
       [false, false, false],
     ],
-    coords: {
-      xMin: 3,
-      xMax: 5,
-      yMin: 0,
-      yMax: 1,
-    },
+    x: 3,
+    y: 0,
   },
   {
     type: 'J',
@@ -83,12 +63,8 @@ var tetrominoDescriptions = [
       [true, true, true],
       [false, false, false],
     ],
-    coords: {
-      xMin: 3,
-      xMax: 5,
-      yMin: 0,
-      yMax: 1,
-    },
+    x: 3,
+    y: 0,
   },
   {
     type: 'L',
@@ -98,33 +74,26 @@ var tetrominoDescriptions = [
       [true, true, true],
       [false, false, false],
     ],
-    coords: {
-      xMin: 3,
-      xMax: 5,
-      yMin: 0,
-      yMax: 1,
-    },
+    x: 3,
+    y: 0,
   },
 ];
 
 Tetromino = function() {
-  //var tetrominoDescription = tetrominoDescriptions[Math.floor(Math.random()*tetrominoDescriptions.length)];
-  var tetrominoDescription = tetrominoDescriptions[1];
-  this.type = tetrominoDescription.type;
-  this.color = tetrominoDescription.color;
-  this.boundingSquare = tetrominoDescription.boundingSquare;
-  this.coords = tetrominoDescription.coords;
+  var tetrominoType = tetrominoTypes[Math.floor(Math.random()*tetrominoTypes.length)];
+  for (var property in tetrominoType) {
+    this[property] = tetrominoType[property];
+  }
 };
 
 Tetromino.prototype.coordsToColor = function() {
-  coordsList = []
+  coordsList = [];
   for (var y = 0; y < this.boundingSquare.length; y++) {
-    var row = this.boundingSquare[y];
-    for (var x = 0; x < row.length; x++) {
+    for (var x = 0; x < this.boundingSquare[y].length; x++) {
       if (this.boundingSquare[y][x]) {
         coordsList.push({
-          y: y + this.coords.yMin,
-          x: x + this.coords.xMin,
+          y: y + this.y,
+          x: x + this.x,
         });
       }
     }
@@ -135,28 +104,16 @@ Tetromino.prototype.coordsToColor = function() {
 Tetromino.prototype.move = function(direction) {
   switch(direction) {
     case 'left':
-      if (this.coords.xMin > 0) {
-        this.coords.xMin -= 1;
-        this.coords.xMax -= 1;
-      }
+      this.x -= 1;
       break;
     case 'right':
-      if (this.coords.xMax < 9) {
-        this.coords.xMin += 1;
-        this.coords.xMax += 1;
-      }
+      this.x += 1;
       break;
     case 'up':
-      if (this.coords.yMin > 0) {
-        this.coords.yMin -= 1;
-        this.coords.yMax -= 1;
-      }
+      this.y -= 1;
       break;
     case 'down':
-      if (this.coords.yMax < 19) {
-        this.coords.yMin += 1;
-        this.coords.yMax += 1;
-      }
+      this.y += 1;
       break;
   }
 };
