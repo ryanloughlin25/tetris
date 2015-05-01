@@ -70,13 +70,10 @@ Game.View.prototype.render = function(model) {
 };
 
 Game.View.prototype.renderTetromino = function(tetromino) {
-  var coords = tetromino.coords;
-  for (var y = coords.yMin; y <= coords.yMax; y++) {
-    for (var x = coords.xMin; x <= coords.xMax; x++) {
-      if (tetromino.occupies(x, y)) {
-        this.colorSquare(x, y, tetromino.color);
-      }
-    }
+  var coords = tetromino.coordsToColor();
+  console.log(coords);
+  for (var i = 0; i < coords.length; i++) {
+    this.colorSquare(coords[i].x, coords[i].y, tetromino.color);
   }
 };
 

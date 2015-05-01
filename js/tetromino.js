@@ -1,4 +1,4 @@
-var tetrominoTypes = [
+var tetrominoDescriptions = [
   {
     type: 'I',
     color: 'cyan',
@@ -8,6 +8,12 @@ var tetrominoTypes = [
       [false, false, false, false],
       [false, false, false, false],
     ],
+    coords: {
+      xMin: 3,
+      xMax: 6,
+      yMin: 0,
+      yMax: 0,
+    },
   },
   {
     type: 'O',
@@ -17,6 +23,12 @@ var tetrominoTypes = [
       [false, true, true, false],
       [false, false, false, false],
     ],
+    coords: {
+      xMin: 4,
+      xMax: 5,
+      yMin: 0,
+      yMax: 1,
+    },
   },
   {
     type: 'T',
@@ -26,6 +38,12 @@ var tetrominoTypes = [
       [true, true, true],
       [false, false, false],
     ],
+    coords: {
+      xMin: 3,
+      xMax: 5,
+      yMin: 0,
+      yMax: 1,
+    },
   },
   {
     type: 'S',
@@ -35,6 +53,12 @@ var tetrominoTypes = [
       [true, true, false],
       [false, false, false],
     ],
+    coords: {
+      xMin: 3,
+      xMax: 5,
+      yMin: 0,
+      yMax: 1,
+    },
   },
   {
     type: 'Z',
@@ -44,6 +68,12 @@ var tetrominoTypes = [
       [false, true, true],
       [false, false, false],
     ],
+    coords: {
+      xMin: 3,
+      xMax: 5,
+      yMin: 0,
+      yMax: 1,
+    },
   },
   {
     type: 'J',
@@ -53,6 +83,12 @@ var tetrominoTypes = [
       [true, true, true],
       [false, false, false],
     ],
+    coords: {
+      xMin: 3,
+      xMax: 5,
+      yMin: 0,
+      yMax: 1,
+    },
   },
   {
     type: 'L',
@@ -62,31 +98,38 @@ var tetrominoTypes = [
       [true, true, true],
       [false, false, false],
     ],
+    coords: {
+      xMin: 3,
+      xMax: 5,
+      yMin: 0,
+      yMax: 1,
+    },
   },
 ];
 
 Tetromino = function() {
-  this.type = 'T';
-  this.color = 'red';
-  this.size = 3;
-  this.boundingSquare = new Array(this.size);
-  for (var i = 0; i < this.size; i++) {
-    this.boundingSquare[i] = new Array(this.size);
-  }
-  this.boundingSquare[0][1] = true;
-  this.boundingSquare[1][0] = true;
-  this.boundingSquare[1][1] = true;
-  this.boundingSquare[1][2] = true;
-  this.coords = {
-    xMin: 0,
-    xMax: 2,
-    yMin: 0,
-    yMax: 1,
-  }
+  //var tetrominoDescription = tetrominoDescriptions[Math.floor(Math.random()*tetrominoDescriptions.length)];
+  var tetrominoDescription = tetrominoDescriptions[1];
+  this.type = tetrominoDescription.type;
+  this.color = tetrominoDescription.color;
+  this.boundingSquare = tetrominoDescription.boundingSquare;
+  this.coords = tetrominoDescription.coords;
 };
 
-Tetromino.prototype.occupies = function(x, y) {
-  return this.boundingSquare[y - this.coords.yMin][x - this.coords.xMin];
+Tetromino.prototype.coordsToColor = function() {
+  coordsList = []
+  for (var y = 0; y < this.boundingSquare.length; y++) {
+    var row = this.boundingSquare[y];
+    for (var x = 0; x < row.length; x++) {
+      if (this.boundingSquare[y][x]) {
+        coordsList.push({
+          y: y + this.coords.yMin,
+          x: x + this.coords.xMin,
+        });
+      }
+    }
+  }
+  return coordsList;
 };
 
 Tetromino.prototype.move = function(direction) {
