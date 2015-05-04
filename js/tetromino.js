@@ -15,12 +15,13 @@ var tetrominoTypes = [
     type: 'O',
     color: 'yellow',
     boundingSquare: [
+      [false, false, false, false],
       [false, true, true, false],
       [false, true, true, false],
       [false, false, false, false],
     ],
     x: 3,
-    y: 0,
+    y: -1,
   },
   {
     type: 'T',
@@ -101,8 +102,8 @@ Tetromino.prototype.coordsToColor = function() {
   return coordsList;
 };
 
-Tetromino.prototype.move = function(direction) {
-  switch(direction) {
+Tetromino.prototype.move = function(movement) {
+  switch(movement) {
     case 'left':
       this.x -= 1;
       break;
@@ -115,5 +116,15 @@ Tetromino.prototype.move = function(direction) {
     case 'down':
       this.y += 1;
       break;
+    case 'rotate':
+      this.rotate();
+      break;
+  }
+};
+
+Tetromino.prototype.rotate = function() {
+  transpose(this.boundingSquare);
+  for (var i = 0; i < this.boundingSquare.length; i++) {
+    this.boundingSquare[i].reverse();
   }
 };

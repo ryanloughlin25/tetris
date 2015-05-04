@@ -25,17 +25,18 @@ Game.Model = function() {
     this.board[i] = new Array(this.width);
   };
   this.activeTetromino = new Tetromino();
-  this.directions = {
+  this.movements = {
     //TODO: disable moving up when done testing
-    87: 'up',
     65: 'left',
-    83: 'down',
     68: 'right',
+    87: 'up',
+    83: 'down',
+    69: 'rotate',
   };
 };
 
 Game.Model.prototype.move = function(keyCode) {
-  this.activeTetromino.move(this.directions[keyCode]);
+  this.activeTetromino.move(this.movements[keyCode]);
 };
 
 Game.View = function() {};
