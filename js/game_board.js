@@ -36,7 +36,7 @@ Game.Model = function() {
 };
 
 Game.Model.prototype.move = function(keyCode) {
-  this.activeTetromino.move(this.movement[keyCode]);
+  this.activeTetromino.move(this.movements[keyCode]);
 };
 
 Game.View = function() {};
